@@ -44,7 +44,7 @@ export default function ProductDetailPage() {
     }
 
     fetchProduct();
-  }, [id]); // This effect runs whenever the 'id' from the URL changes
+  }, [id]); 
 
   if (loading) {
     return <div style={{ textAlign: 'center', padding: '4rem' }}>Loading product details...</div>;
