@@ -95,8 +95,13 @@ export default function Navbar({ siteSettings }) {
         .notification-date { font-size: 0.8em; color: #888; margin-top: 5px; }
 
         @media (min-width: 768px) { 
-          .nav { flex-direction: row; justify-content: space-between; padding: 1rem 2rem; }
+          .nav { flex-direction: row; justify-content: space-between; padding: 1rem 2rem; text-align: left; }
           .main-nav-links { flex-direction: row; gap: 1.5rem; margin: 0; }
+        }
+
+        @media (max-width: 767px) {
+          .nav { text-align: left; align-items: flex-start; }
+          .logo-link { justify-content: flex-start; }
         }
       `}</style>
 

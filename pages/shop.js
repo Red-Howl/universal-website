@@ -178,6 +178,10 @@ export default function ShopPage() {
         }
 
         .filters-header {
+          margin-bottom: 1.5rem;
+        }
+
+        .filters-title-section {
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -201,9 +205,10 @@ export default function ShopPage() {
 
         .filters-controls {
           display: flex;
-          gap: 1rem;
+          gap: 1.5rem;
           align-items: center;
           flex-wrap: wrap;
+          justify-content: center;
         }
 
         .filter-group {
@@ -327,14 +332,25 @@ export default function ShopPage() {
             padding: 1.5rem;
           }
 
-          .filters-header {
+          .filters-title-section {
             flex-direction: column;
             align-items: flex-start;
+            gap: 0.5rem;
           }
 
           .filters-controls {
             width: 100%;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: stretch;
+          }
+
+          .filter-group {
+            width: 100%;
+          }
+
+          .filter-select {
+            width: 100%;
           }
 
           .products-grid {
@@ -363,11 +379,13 @@ export default function ShopPage() {
         <div className="shop-container">
           <div className="filters-section">
             <div className="filters-header">
-              <div>
-                <h2 className="filters-title">Filter & Sort</h2>
-                <p className="products-count">
-                  {filteredProducts.length} {filteredProducts.length === 1 ? 'item' : 'items'} found
-                </p>
+              <div className="filters-title-section">
+                <div>
+                  <h2 className="filters-title">Filter & Sort</h2>
+                  <p className="products-count">
+                    {filteredProducts.length} {filteredProducts.length === 1 ? 'item' : 'items'} found
+                  </p>
+                </div>
               </div>
 
               <div className="filters-controls">
