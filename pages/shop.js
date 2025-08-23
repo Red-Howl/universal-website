@@ -107,9 +107,9 @@ export default function ShopPage() {
 
         .shop-header-content {
           text-align: center;
-          padding: 2rem 0 3rem 0;
+          padding: 1rem 0 1rem 0;
           background: var(--color-white);
-          margin-bottom: 3rem;
+          margin-bottom: rem;
           position: relative;
           overflow: hidden;
         }
