@@ -74,7 +74,7 @@ export default function Navbar({ siteSettings }) {
     <>
       <style jsx>{`
         /* Existing styles */
-        .nav { display: flex; flex-direction: column; align-items: center; padding: 1rem; background-color: var(--color-background-cream); border-bottom: 1px solid #eee; font-family: var(--font-lato); text-align: center; }
+        .nav { display: flex; flex-direction: column; align-items: center; padding: 1rem; background-color: var(--color-background-cream); border-bottom: px solid #eee; font-family: var(--font-lato); text-align: center; }
         .logo-link { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--color-primary-teal); }
         .logo-img { height: 50px; width: 50px; border-radius: 50%; object-fit: cover; }
         .logo-text { font-size: 1.8rem; font-weight: bold; font-family: var(--font-playfair); }
@@ -89,7 +89,7 @@ export default function Navbar({ siteSettings }) {
         .notifications-container { position: relative; }
         .notification-bell { cursor: pointer; position: relative; font-size: 1.5rem; }
         .unread-dot { position: absolute; top: 0px; right: 0px; width: 8px; height: 8px; background-color: red; border-radius: 50%; }
-        .notifications-dropdown { position: absolute; top: 100%; right: 0; background-color: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 300px; max-height: 400px; overflow-y: auto; z-index: 1000; margin-top: 15px; text-align: left; }
+        .notifications-dropdown { position: absolute; top: 100%; right: 0; background-color: white; border: 1px solid #ddd; border-radius: px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 300px; max-height: 400px; overflow-y: auto; z-index: 1000; margin-top: 15px; text-align: left; }
         .notification-item { padding: 1rem; border-bottom: 1px solid #eee; }
         .notification-item:last-child { border-bottom: none; }
         .notification-date { font-size: 0.8em; color: #888; margin-top: 5px; }
