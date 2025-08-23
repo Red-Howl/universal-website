@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -73,7 +74,6 @@ export default function Navbar({ siteSettings }) {
   return (
     <>
       <style jsx>{`
-        /* Updated styles */
         .nav { display: flex; flex-direction: column; align-items: center; padding: 1rem; background-color: var(--color-background-cream); border-bottom: 1px solid #eee; font-family: var(--font-lato); text-align: center; position: relative; }
         .logo-container { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); }
         .brand-link { text-decoration: none; color: var(--color-primary-teal); }
@@ -88,23 +88,17 @@ export default function Navbar({ siteSettings }) {
         .cart-container { position: relative; color: #2c2c2c; text-decoration: none; font-weight: 600; }
         .cart-count { position: absolute; top: -10px; right: -10px; background-color: var(--color-accent-gold); color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         
-        /* Mobile navigation reorganization */
-        .mobile-nav-row { display: flex; justify-content: space-between; align-items: center; width: 100%; margin: 0.5rem 0; }
-        .mobile-nav-row a, .mobile-nav-row button { color: #2c2c2c; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
-        .mobile-custom-order { color: #2c2c2c; text-decoration: none; font-weight: 600; }
-
         /* New styles for notifications */
         .notifications-container { position: relative; }
         .notification-bell { cursor: pointer; position: relative; font-size: 1.5rem; }
         .unread-dot { position: absolute; top: 0px; right: 0px; width: 8px; height: 8px; background-color: red; border-radius: 50%; }
-        .notifications-dropdown { position: absolute; top: 100%; right: 0; background-color: white; border: 1px solid #ddd; border-radius: px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 300px; max-height: 400px; overflow-y: auto; z-index: 1000; margin-top: 15px; text-align: left; }
+        .notifications-dropdown { position: absolute; top: 100%; right: 0; background-color: white; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 300px; max-height: 400px; overflow-y: auto; z-index: 1000; margin-top: 15px; text-align: left; }
         .notification-item { padding: 1rem; border-bottom: 1px solid #eee; }
         .notification-item:last-child { border-bottom: none; }
         .notification-date { font-size: 0.8em; color: #888; margin-top: 5px; }
 
         @media (min-width: 768px) { 
           .nav { flex-direction: row; justify-content: center; padding: 1rem 2rem; align-items: center; }
-          .mobile-nav-row { display: none; }
           .main-nav-links { flex-direction: row; gap: 1.5rem; margin: 0; display: flex; }
           .right-nav { display: flex; position: absolute; right: 2rem; }
         }
@@ -121,62 +115,47 @@ export default function Navbar({ siteSettings }) {
           <span className="logo-text">Kalamkar</span>
         </Link>
 
-        {/* Mobile Navigation Layout */}
-        <div className="mobile-nav-row">
-          {user ? (
-            <>
-              <Link href="/account/orders">My Account</Link>
-              <Link href="/shop">Shop</Link>
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="mobile-custom-order">
-                Custom Order
-              </a>
-              <button onClick={handleLogout} className="logout-btn">Logout</button>
-            </>
-          ) : (
-            <>
-              <Link href="/login">Login</Link>
-              <Link href="/shop">Shop</Link>
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="mobile-custom-order">
-                Custom Order
-              </a>
-            </>
-          )}
-        </div>
-
-        <div className="mobile-nav-row">
-          <Link href="/cart" className="cart-container">
-            Cart
-            {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
-          </Link>
-          
-          {/* Notifications Bell */}
-          <div className="notifications-container">
-              <div className="notification-bell" onClick={handleBellClick}>
-                  <span>🔔</span>
-                  {hasUnread && <div className="unread-dot"></div>}
-              </div>
-              {showNotifications && (
-                  <div className="notifications-dropdown">
-                      {notifications.length > 0 ? (
-                          notifications.map(notif => (
-                              <div key={notif.id} className="notification-item">
-                                  <p>{notif.message}</p>
-                                  <p className="notification-date">{new Date(notif.created_at).toLocaleDateString()}</p>
-                              </div>
-                          ))
-                      ) : <div className="notification-item">No new announcements.</div>}
-                  </div>
-              )}
-          </div>
-        </div>
-
-        {/* Desktop Navigation (hidden on mobile) */}
+        {/* Main Navigation */}
         <ul className="main-nav-links">
           <li><Link href="/shop">Shop</Link></li>
           <li>
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
               Custom Order
             </a>
+          </li>
+          {user ? (
+            <>
+              <li><Link href="/account/orders">My Account</Link></li>
+              <li><button onClick={handleLogout} className="logout-btn">Logout</button></li>
+            </>
+          ) : (
+            <li><Link href="/login">Login</Link></li>
+          )}
+          <li>
+            <Link href="/cart" className="cart-container">
+              🛒
+              {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
+            </Link>
+          </li>
+          <li>
+            <div className="notifications-container">
+                <div className="notification-bell" onClick={handleBellClick}>
+                    <span>🔔</span>
+                    {hasUnread && <div className="unread-dot"></div>}
+                </div>
+                {showNotifications && (
+                    <div className="notifications-dropdown">
+                        {notifications.length > 0 ? (
+                            notifications.map(notif => (
+                                <div key={notif.id} className="notification-item">
+                                    <p>{notif.message}</p>
+                                    <p className="notification-date">{new Date(notif.created_at).toLocaleDateString()}</p>
+                                </div>
+                            ))
+                        ) : <div className="notification-item">No new announcements.</div>}
+                    </div>
+                )}
+            </div>
           </li>
         </ul>
 
