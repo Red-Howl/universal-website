@@ -169,7 +169,7 @@ export default function ShopPage() {
 
         .filters-row {
           display: flex;
-          justify-content: space-between;
+          justify-content: flex-start;
           align-items: center;
           gap: 2rem;
         }
@@ -296,13 +296,14 @@ export default function ShopPage() {
           }
 
           .filters-row {
-            flex-direction: column;
-            align-items: flex-start;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
             gap: 1rem;
           }
 
           .filter-group {
-            width: 100%;
+            flex: 1;
           }
 
           .products-grid {
@@ -313,6 +314,10 @@ export default function ShopPage() {
       `}</style>
 
       <div className="shop-page-luxury">
+        <div className="shop-header-content">
+          <h1 className="shop-title">Our Collection</h1>
+          <p className="shop-subtitle">"Where Art Meets Fashion"</p>
+        </div>
 
         <div className="shop-container">
           <div className="filters-section">
@@ -346,11 +351,6 @@ export default function ShopPage() {
                 </select>
               </div>
             </div>
-          </div>
-
-          <div className="shop-header-content">
-            <h1 className="shop-title">Our Collection</h1>
-            <p className="shop-subtitle">"Where Art Meets Fashion"</p>
           </div>
 
           {filteredProducts.length > 0 ? (

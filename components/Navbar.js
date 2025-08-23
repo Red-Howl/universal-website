@@ -127,28 +127,27 @@ export default function Navbar({ siteSettings }) {
             <>
               <Link href="/account/orders">My Account</Link>
               <Link href="/shop">Shop</Link>
-              <Link href="/cart" className="cart-container">
-                Cart
-                {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
-              </Link>
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="mobile-custom-order">
+                Custom Order
+              </a>
               <button onClick={handleLogout} className="logout-btn">Logout</button>
             </>
           ) : (
             <>
               <Link href="/login">Login</Link>
               <Link href="/shop">Shop</Link>
-              <Link href="/cart" className="cart-container">
-                Cart
-                {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
-              </Link>
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="mobile-custom-order">
+                Custom Order
+              </a>
             </>
           )}
         </div>
 
         <div className="mobile-nav-row">
-          <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="mobile-custom-order">
-            Custom Order
-          </a>
+          <Link href="/cart" className="cart-container">
+            Cart
+            {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
+          </Link>
           
           {/* Notifications Bell */}
           <div className="notifications-container">
