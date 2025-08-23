@@ -105,16 +105,16 @@ export default function ShopPage() {
           padding: 2rem 0;
         }
 
-        .shop-header {
+        .shop-header-content {
           text-align: center;
-          padding: 3rem 0;
+          padding: 2rem 0 3rem 0;
           background: var(--color-white);
           margin-bottom: 3rem;
           position: relative;
           overflow: hidden;
         }
 
-        .shop-header::before {
+        .shop-header-content::before {
           content: '';
           position: absolute;
           top: 0;
@@ -124,7 +124,7 @@ export default function ShopPage() {
           background: var(--gradient-gold);
         }
 
-        .shop-header::after {
+        .shop-header-content::after {
           content: '';
           position: absolute;
           bottom: 0;
@@ -148,18 +148,8 @@ export default function ShopPage() {
           font-size: 1.3rem;
           font-style: italic;
           color: var(--color-gray);
-          margin-bottom: 2rem;
+          margin-bottom: 0;
           letter-spacing: 1px;
-        }
-
-        .shop-description {
-          font-family: var(--font-secondary);
-          font-size: 1.1rem;
-          color: var(--color-dark-gray);
-          max-width: 600px;
-          margin: 0 auto;
-          line-height: 1.7;
-          font-weight: 300;
         }
 
         .shop-container {
@@ -173,37 +163,15 @@ export default function ShopPage() {
           padding: 2rem;
           border-radius: 20px;
           box-shadow: var(--shadow-soft);
-          margin-bottom: 3rem;
+          margin-bottom: 0;
           border: 1px solid rgba(212, 175, 55, 0.1);
         }
 
-        .filters-header {
+        .filters-row {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 1.5rem;
-          flex-wrap: wrap;
-          gap: 1rem;
-        }
-
-        .filters-title {
-          font-family: var(--font-primary);
-          font-size: 1.5rem;
-          color: var(--color-dark-gray);
-          margin: 0;
-        }
-
-        .products-count {
-          font-family: var(--font-secondary);
-          color: var(--color-gray);
-          font-size: 1rem;
-        }
-
-        .filters-controls {
-          display: flex;
-          gap: 1rem;
-          align-items: center;
-          flex-wrap: wrap;
+          gap: 2rem;
         }
 
         .filter-group {
@@ -327,14 +295,14 @@ export default function ShopPage() {
             padding: 1.5rem;
           }
 
-          .filters-header {
+          .filters-row {
             flex-direction: column;
             align-items: flex-start;
+            gap: 1rem;
           }
 
-          .filters-controls {
+          .filter-group {
             width: 100%;
-            justify-content: space-between;
           }
 
           .products-grid {
@@ -345,62 +313,44 @@ export default function ShopPage() {
       `}</style>
 
       <div className="shop-page-luxury">
-        <div className="shop-header">
-          <div className="luxury-accent luxury-accent-1"></div>
-          <div className="luxury-accent luxury-accent-2"></div>
-
-          <div className="shop-container">
-            <h1 className="shop-title">Our Collection</h1>
-            <p className="shop-subtitle">"Where Art Meets Fashion"</p>
-            <p className="shop-description">
-              Discover our curated collection of hand-painted masterpieces. Each piece is carefully crafted 
-              with attention to detail, ensuring that every garment tells a unique story of elegance and 
-              artistic expression.
-            </p>
-          </div>
-        </div>
 
         <div className="shop-container">
           <div className="filters-section">
-            <div className="filters-header">
-              <div>
-                <h2 className="filters-title">Filter & Sort</h2>
-                <p className="products-count">
-                  {filteredProducts.length} {filteredProducts.length === 1 ? 'item' : 'items'} found
-                </p>
+            <div className="filters-row">
+              <div className="filter-group">
+                <label className="filter-label">Category</label>
+                <select 
+                  className="filter-select"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                  {categories.map(category => (
+                    <option key={category} value={category}>
+                      {category === 'all' ? 'All Categories' : category}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              <div className="filters-controls">
-                <div className="filter-group">
-                  <label className="filter-label">Category</label>
-                  <select 
-                    className="filter-select"
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                  >
-                    {categories.map(category => (
-                      <option key={category} value={category}>
-                        {category === 'all' ? 'All Categories' : category}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="filter-group">
-                  <label className="filter-label">Sort By</label>
-                  <select 
-                    className="filter-select"
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                  >
-                    <option value="newest">Newest First</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                    <option value="name">Name: A to Z</option>
-                  </select>
-                </div>
+              <div className="filter-group">
+                <label className="filter-label">Sort By</label>
+                <select 
+                  className="filter-select"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                >
+                  <option value="newest">Newest First</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="name">Name: A to Z</option>
+                </select>
               </div>
             </div>
+          </div>
+
+          <div className="shop-header-content">
+            <h1 className="shop-title">Our Collection</h1>
+            <p className="shop-subtitle">"Where Art Meets Fashion"</p>
           </div>
 
           {filteredProducts.length > 0 ? (
