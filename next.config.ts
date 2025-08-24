@@ -7,10 +7,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true
   },
-  distDir: 'out',
-  experimental: {
-    esmExternals: false
-  }
+  distDir: 'out'
 };
 
 export default nextConfig;
