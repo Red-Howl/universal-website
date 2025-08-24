@@ -15,8 +15,8 @@ export default function Footer({ siteSettings }) {
     <footer className="footer">
       <div className="footer-content">
         <div className="social-links">
-          {siteSettings?.social_instagram && <a href={siteSettings.social_instagram} target="_blank" rel="noopener noreferrer">📷</a>}
-          {siteSettings?.social_youtube && <a href={siteSettings.social_youtube} target="_blank" rel="noopener noreferrer">📺</a>}
+          {siteSettings?.social_instagram && <a href={siteSettings.social_instagram} target="_blank" rel="noopener noreferrer">Instagram</a>}
+          {siteSettings?.social_youtube && <a href={siteSettings.social_youtube} target="_blank" rel="noopener noreferrer">Youtube</a>}
         </div>
         <div className="contact-info">
           <p>{siteSettings?.contact_phone}</p>

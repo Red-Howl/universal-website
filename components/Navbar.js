@@ -270,13 +270,13 @@ export default function Navbar({ siteSettings }) {
           )}
           
           <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-            Custom Order
+             Custom order
           </a>
           
           <Link href="/shop">Shop</Link>
           
           <Link href="/cart" className="cart-container">
-            🛒
+           Cart
             {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
           </Link>
 

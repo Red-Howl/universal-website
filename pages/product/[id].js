@@ -68,7 +68,7 @@ export default function ProductDetailPage() {
         .product-name { font-family: var(--font-playfair); font-size: 2.5rem; margin-bottom: 1rem; }
         .product-price { font-size: 1.8rem; color: var(--color-primary-teal); margin-bottom: 1.5rem; }
         .product-description { font-family: var(--font-lato); line-height: 1.6; margin-bottom: 2rem; }
-        .add-to-cart-btn { padding: 1rem 2rem; font-size: 1rem; font-weight: bold; color: white; background-color: var(--color-primary-teal); border: none; border-radius: 5px; cursor: pointer; text-transform: uppercase; }
+        .add-to-cart-btn { padding: 1rem 2rem; font-size: 1rem; font-weight: bold; color: white; background-color: var(--color-buttons-cream); border: none; border-radius: 5px; cursor: pointer; text-transform: uppercase; }
         @media (min-width: 768px) { .product-container { flex-direction: row; } }
         .button-container {
           display: flex;
@@ -79,7 +79,7 @@ export default function ProductDetailPage() {
           font-size: 1rem;
           font-weight: bold;
           color: white;
-          background-color: var(--color-primary-teal); /* Different color */
+          background-color: var(--color-buttons-cream); /* Different color */
           border: none;
           border-radius: 5px;
           cursor: pointer;

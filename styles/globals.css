@@ -1,8 +1,9 @@
 :root {
-  --color-primary-teal: #008080;
+  --color-primary-teal: #333333;
   --color-accent-gold: #D4AF37;
   --color-background-cream: #A9A9A9;
-  --color-text-charcoal: #333333
+  --color-text-charcoal: #333333;
+  --color-buttons-cream:#333333
 }
 
 * {
