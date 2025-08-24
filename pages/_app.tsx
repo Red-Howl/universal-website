@@ -1,30 +1,22 @@
 import '../styles/globals.css'
 import Layout from '../components/Layout'
 import { CartProvider } from '../context/CartContext';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { supabase } from '../lib/supabase';
 
 function MyApp({ Component, pageProps, siteSettings }) {
   return (
     <CartProvider>
       <Layout siteSettings={siteSettings}>
-        {/* --- THIS LINE IS UPDATED --- */}
         <Component {...pageProps} siteSettings={siteSettings} />
       </Layout>
     </CartProvider>
   )
 }
 
-MyApp.getInitialProps = async (ctx) => {
-  const { data } = await supabase.from('site_settings').select('*');
-  const settingsObject = data ? data.reduce((acc, setting) => {
-    acc[setting.setting_name] = setting.setting_value;
-    return acc;
-  }, {}) : {};
-  return { siteSettings: settingsObject };
+// For static export, we'll use getStaticProps instead of getInitialProps
+MyApp.getInitialProps = async () => {
+  // Return empty siteSettings for static export
+  return { siteSettings: {} };
 };
 
 export default MyApp

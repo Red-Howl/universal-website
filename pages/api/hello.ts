@@ -1,5 +1,3 @@
-// API routes are not compatible with static export
-// This file has been disabled for Netlify deployment
-export default function handler() {
-  return null;
-}
+
+// This file is removed for static export compatibility
+// API routes are not supported with output: export
