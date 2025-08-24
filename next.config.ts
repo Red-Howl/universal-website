@@ -1,16 +1,8 @@
-
 import type { NextConfig } from "next";
+import { env } from "process";
 
 const nextConfig: NextConfig = {
-  output: 'export',
-  trailingSlash: true,
-  images: {
-    unoptimized: true
-  },
-  distDir: 'out',
-  experimental: {
-    esmExternals: false
-  }
+  allowedDevOrigins: [env.REPLIT_DOMAINS.split(",")[0]],
 };
 
-export default nextConfig;
+module.exports = nextConfig;

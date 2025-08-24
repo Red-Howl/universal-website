@@ -11,6 +11,7 @@ export default function ProductCard({ product }) {
         .card {
           display: block;
           width: 100%;
+          max-width: 350px;
           margin: 0 auto;
           background-color: white;
           border-radius: 8px;
@@ -39,29 +40,27 @@ export default function ProductCard({ product }) {
         }
 
         .card-content {
-          padding: 0.8rem;
+          padding: 1rem;
         }
         .card-title {
-          font-size: 1rem;
+          font-size: 1.2rem;
           font-weight: bold;
-          margin-bottom: 0.4rem;
-          line-height: 1.2;
+          margin-bottom: 0.5rem;
         }
         .card-price {
-          font-size: 1rem;
+          font-size: 1.1rem;
           color: var(--color-primary-teal);
-          margin-bottom: 0.8rem;
+          margin-bottom: 1rem;
         }
         .card-button {
-          padding: 0.5rem 1rem;
-          font-size: 0.8rem;
+          padding: 0.7rem 1.5rem;
+          font-size: 0.9rem;
           font-weight: bold;
           color: white;
           background-color: var(--color-primary-teal);
           border: none;
           border-radius: 5px;
           cursor: pointer;
-          width: 100%;
         }
       `}</style>
 

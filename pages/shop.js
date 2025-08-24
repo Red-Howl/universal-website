@@ -1,15 +1,34 @@
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import ProductCard from '../components/ProductCard';
-import { supabase } from '../lib/supabase';
 
-export default function ShopPage({ initialProducts }) {
-  const [products, setProducts] = useState(initialProducts || []);
-  const [loading, setLoading] = useState(false); // Set loading to false as data is pre-fetched
+// Initialize the Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+export default function ShopPage() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
 
-  // Effect to filter and sort products based on state changes
+  useEffect(() => {
+    async function fetchProducts() {
+      const { data, error } = await supabase.from('products').select('*');
+      if (error) {
+        console.error('Error fetching products:', error);
+      } else {
+        setProducts(data || []);
+        setFilteredProducts(data || []);
+      }
+      setLoading(false);
+    }
+
+    fetchProducts();
+  }, []);
+
   useEffect(() => {
     let filtered = [...products];
 
@@ -38,12 +57,44 @@ export default function ShopPage({ initialProducts }) {
     setFilteredProducts(filtered);
   }, [products, selectedCategory, sortBy]);
 
-  // Dynamically get categories from the initial products
   const categories = ['all', ...new Set(products.map(p => p.category).filter(Boolean))];
 
-  // If initialProducts is not available, we would normally show a loading state.
-  // However, for static generation, we assume initialProducts is always populated.
-  // If there's a fallback mechanism needed, it would be implemented here or in getStaticProps.
+  if (loading) {
+    return (
+      <div className="shop-loading">
+        <style jsx>{`
+          .shop-loading {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-light);
+          }
+          .loading-content {
+            text-align: center;
+            color: var(--color-dark-gray);
+          }
+          .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(212, 175, 55, 0.2);
+            border-top: 3px solid var(--color-primary-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+          }
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+        <div className="loading-content">
+          <div className="loading-spinner"></div>
+          <h2>Loading our exquisite collection...</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -158,8 +209,8 @@ export default function ShopPage({ initialProducts }) {
 
         .products-grid {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 1.5rem;
+          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+          gap: 2rem;
           margin-bottom: 3rem;
         }
 
@@ -256,8 +307,8 @@ export default function ShopPage({ initialProducts }) {
           }
 
           .products-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
           }
         }
       `}</style>
@@ -322,39 +373,4 @@ export default function ShopPage({ initialProducts }) {
       </div>
     </>
   );
-}
-
-// This function fetches data at build time for static generation
-export async function getStaticProps() {
-  try {
-    const { createClient } = require('@supabase/supabase-js');
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-    const { data, error } = await supabase.from('products').select('*');
-
-    if (error) {
-      console.error('Error fetching products for static props:', error);
-      return {
-        props: {
-          initialProducts: [],
-        },
-        revalidate: 60, // Re-generate page every 60 seconds if needed
-      };
-    }
-
-    return {
-      props: {
-        initialProducts: data || [],
-      },
-    };
-  } catch (error) {
-    console.error('Error in getStaticProps:', error);
-    return {
-      props: {
-        initialProducts: [],
-      },
-    };
-  }
 }

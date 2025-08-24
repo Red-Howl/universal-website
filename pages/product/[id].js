@@ -1,22 +1,37 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
+import { createClient } from '@supabase/supabase-js';
 import { CartContext } from '../../context/CartContext';
-import { supabase } from '../../lib/supabase';
 
-export default function ProductDetailPage({ initialProduct }) {
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+export default function ProductDetailPage() {
   const router = useRouter();
   const { id } = router.query;
   const { addToCart } = useContext(CartContext);
 
-  const [product, setProduct] = useState(initialProduct);
-  const [loading, setLoading] = useState(false);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    if (initialProduct) {
-      setProduct(initialProduct);
+    async function fetchProduct() {
+      if (!id) return;
+
+      const { data, error } = await supabase.from('products').select('*').eq('id', id).single();
+
+      if (error) {
+        console.error('Error fetching product:', error);
+      } else {
+        setProduct(data);
+      }
+      setLoading(false);
     }
-  }, [initialProduct]);
+
+    fetchProduct();
+  }, [id]);
 
   const handleBuyNow = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -181,49 +196,4 @@ export default function ProductDetailPage({ initialProduct }) {
       </div>
     </>
   );
-}
-
-export async function getStaticPaths() {
-  const { createClient } = require('@supabase/supabase-js');
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
-  
-  const { data, error } = await supabase.from('products').select('id');
-
-  if (error) {
-    console.error('Error fetching paths:', error);
-    return { paths: [], fallback: 'blocking' };
-  }
-
-  const paths = data.map((product) => ({
-    params: { id: product.id.toString() },
-  }));
-
-  return { paths, fallback: 'blocking' };
-}
-
-export async function getStaticProps({ params }) {
-  const { createClient } = require('@supabase/supabase-js');
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
-  
-  const { id } = params;
-  const { data, error } = await supabase
-    .from('products')
-    .select('*')
-    .eq('id', id)
-    .single();
-
-  if (error) {
-    console.error('Error fetching product for static props:', error);
-    return { props: { initialProduct: null } };
-  }
-
-  return {
-    props: {
-      initialProduct: data,
-    },
-  };
 }
