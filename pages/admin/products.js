@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AdminLayout from '../../components/AdminLayout';
@@ -19,21 +20,36 @@ export default function AdminProductsPage() {
     setProducts(data);
   }
 
-  // --- THIS IS THE NEW DELETE FUNCTION ---
-  const handleDelete = async (productId, imageUrl) => {
-    // 1. Show a confirmation dialog
+  const handleDelete = async (productId, imageUrls, imageUrl) => {
     if (window.confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
       try {
-        // 2. Delete the image from Supabase Storage
-        const fileName = imageUrl.split('/').pop(); // Extracts the file name from the URL
-        const { error: storageError } = await supabase.storage.from('product-images').remove([fileName]);
-        if (storageError) throw storageError;
+        // Handle both old and new image formats
+        const imagesToDelete = [];
+        
+        if (imageUrls && Array.isArray(imageUrls)) {
+          // New format with multiple images
+          imageUrls.forEach(url => {
+            const fileName = url.split('/').pop();
+            imagesToDelete.push(fileName);
+          });
+        } else if (imageUrl) {
+          // Old format with single image
+          const fileName = imageUrl.split('/').pop();
+          imagesToDelete.push(fileName);
+        }
 
-        // 3. Delete the product record from the database
+        // Delete images from storage
+        if (imagesToDelete.length > 0) {
+          const { error: storageError } = await supabase.storage
+            .from('product-images')
+            .remove(imagesToDelete);
+          if (storageError) throw storageError;
+        }
+
+        // Delete the product record from the database
         const { error: dbError } = await supabase.from('products').delete().eq('id', productId);
         if (dbError) throw dbError;
 
-        // 4. Refresh the product list on the page
         fetchProducts();
         alert('Product deleted successfully!');
 
@@ -46,57 +62,62 @@ export default function AdminProductsPage() {
   return (
     <AdminLayout>
       <style jsx>{`
-        /* Styles are the same as before */
-        .admin-container { padding: 2rem; }
-        .header-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .admin-title { font-family: var(--font-playfair); font-size: 2.5rem; margin: 0; }
-        .add-product-btn { background-color: var(--color-primary-teal); color: white; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 5px; font-weight: bold; }
-        .product-table { width: 100%; border-collapse: collapse; }
-        .product-table th, .product-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        .product-table th { background-color: #f2f2f2; }
-        .action-btn { background-color: var(--color-accent-gold); color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 5px; border: none; cursor: pointer; }
-        .delete-btn { background-color: #e74c3c; } /* Red color for delete button */
+        .products-container { max-width: 1200px; margin: 2rem auto; padding: 2rem; }
+        .products-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .products-title { font-family: var(--font-playfair); font-size: 2.5rem; margin: 0; }
+        .add-btn { padding: 0.8rem 1.5rem; background-color: var(--color-primary-teal); color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .products-table { width: 100%; border-collapse: collapse; background-color: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .products-table th, .products-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+        .products-table th { background-color: #f8f9fa; font-weight: bold; }
+        .product-image { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
+        .actions-cell { display: flex; gap: 0.5rem; }
+        .edit-btn, .delete-btn { padding: 0.4rem 0.8rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; text-decoration: none; display: inline-block; }
+        .edit-btn { background-color: #ffc107; color: black; }
+        .delete-btn { background-color: #dc3545; color: white; }
       `}</style>
-      <div className="admin-container">
-        <div className="header-container">
-          <h1 className="admin-title">Manage Products</h1>
-          <Link href="/admin/products/new" className="add-product-btn">
-            + Add New Product
-          </Link>
+      <div className="products-container">
+        <div className="products-header">
+          <h1 className="products-title">Manage Products</h1>
+          <Link href="/admin/products/new" className="add-btn">Add New Product</Link>
         </div>
-        <table className="product-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Category</th>
-                    <th>Actions</th>
+        <table className="products-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map(product => {
+              // Handle both old and new image formats
+              const displayImage = product.imageUrls && product.imageUrls.length > 0 
+                ? product.imageUrls[0] 
+                : product.imageUrl || 'https://placehold.co/60x60?text=No+Image';
+              
+              return (
+                <tr key={product.id}>
+                  <td>
+                    <img src={displayImage} alt={product.name} className="product-image" />
+                  </td>
+                  <td>{product.name}</td>
+                  <td>₹{product.price}</td>
+                  <td>{product.category}</td>
+                  <td className="actions-cell">
+                    <Link href={`/admin/products/edit/${product.id}`} className="edit-btn">Edit</Link>
+                    <button 
+                      onClick={() => handleDelete(product.id, product.imageUrls, product.imageUrl)} 
+                      className="delete-btn"
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
-            </thead>
-            <tbody>
-                {products.map(product => (
-                    <tr key={product.id}>
-                        <td>{product.id}</td>
-                        <td>{product.name}</td>
-                        <td>₹{product.price}</td>
-                        <td>{product.category}</td>
-                        <td>
-                          <Link href={`/admin/products/edit/${product.id}`} className="action-btn">
-                            Edit
-                          </Link>
-                          {/* --- THIS IS THE UPDATED DELETE BUTTON --- */}
-                          <button 
-                            className="action-btn delete-btn" 
-                            style={{ marginLeft: '10px' }}
-                            onClick={() => handleDelete(product.id, product.imageUrl)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
+              );
+            })}
+          </tbody>
         </table>
       </div>
     </AdminLayout>

@@ -1,13 +1,16 @@
+
 import React from 'react';
 import Link from 'next/link';
 
 export default function ProductCard({ product }) {
-  const displayImageUrl = product.imageUrl || 'https://placehold.co/600x600?text=No+Image';
+  // Use first image from imageUrls array, or fallback to old imageUrl, or placeholder
+  const displayImageUrl = product.imageUrls && product.imageUrls.length > 0 
+    ? product.imageUrls[0] 
+    : product.imageUrl || 'https://placehold.co/600x600?text=No+Image';
 
   return (
     <Link href={`/product/${product.id}`} className="card">
       <style jsx>{`
-        /* --- THIS IS THE FINAL, CORRECTED STYLE --- */
         .card {
           display: block;
           width: 100%;
@@ -27,18 +30,16 @@ export default function ProductCard({ product }) {
           transform: translateY(-5px);
         }
 
-        /* This is the new container for the image */
         .image-container {
           width: 100%;
-          aspect-ratio: 1 / 1; /* This creates a perfect square */
-          overflow: hidden; /* This is necessary for the cropping effect */
+          aspect-ratio: 1 / 1;
+          overflow: hidden;
         }
 
-        /* This styles the image itself */
         .card-image {
           width: 100%;
           height: 100%;
-          object-fit: cover; /* This is the "crop" effect you wanted */
+          object-fit: cover;
         }
 
         .card-content {
@@ -66,7 +67,6 @@ export default function ProductCard({ product }) {
         }
       `}</style>
 
-      {/* --- THIS IS THE NEW HTML STRUCTURE FOR THE IMAGE --- */}
       <div className="image-container">
         <img src={displayImageUrl} alt={product.name} className="card-image" />
       </div>
