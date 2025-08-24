@@ -3,10 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 
 export default function ProductCard({ product }) {
-  // Use first image from imageUrls array, or fallback to old imageUrl, or placeholder
-  const displayImageUrl = product.imageUrls && product.imageUrls.length > 0 
-    ? product.imageUrls[0] 
-    : product.imageUrl || 'https://placehold.co/600x600?text=No+Image';
+  const displayImageUrl = product.imageUrl || 'https://placehold.co/600x600?text=No+Image';
 
   return (
     <Link href={`/product/${product.id}`} className="card">

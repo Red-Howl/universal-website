@@ -20,29 +20,15 @@ export default function AdminProductsPage() {
     setProducts(data);
   }
 
-  const handleDelete = async (productId, imageUrls, imageUrl) => {
+  const handleDelete = async (productId, imageUrl) => {
     if (window.confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
       try {
-        // Handle both old and new image formats
-        const imagesToDelete = [];
-        
-        if (imageUrls && Array.isArray(imageUrls)) {
-          // New format with multiple images
-          imageUrls.forEach(url => {
-            const fileName = url.split('/').pop();
-            imagesToDelete.push(fileName);
-          });
-        } else if (imageUrl) {
-          // Old format with single image
+        // Delete image from storage
+        if (imageUrl) {
           const fileName = imageUrl.split('/').pop();
-          imagesToDelete.push(fileName);
-        }
-
-        // Delete images from storage
-        if (imagesToDelete.length > 0) {
           const { error: storageError } = await supabase.storage
             .from('product-images')
-            .remove(imagesToDelete);
+            .remove([fileName]);
           if (storageError) throw storageError;
         }
 
@@ -92,10 +78,7 @@ export default function AdminProductsPage() {
           </thead>
           <tbody>
             {products.map(product => {
-              // Handle both old and new image formats
-              const displayImage = product.imageUrls && product.imageUrls.length > 0 
-                ? product.imageUrls[0] 
-                : product.imageUrl || 'https://placehold.co/60x60?text=No+Image';
+              const displayImage = product.imageUrl || 'https://placehold.co/60x60?text=No+Image';
               
               return (
                 <tr key={product.id}>
@@ -108,7 +91,7 @@ export default function AdminProductsPage() {
                   <td className="actions-cell">
                     <Link href={`/admin/products/edit/${product.id}`} className="edit-btn">Edit</Link>
                     <button 
-                      onClick={() => handleDelete(product.id, product.imageUrls, product.imageUrl)} 
+                      onClick={() => handleDelete(product.id, product.imageUrl)} 
                       className="delete-btn"
                     >
                       Delete

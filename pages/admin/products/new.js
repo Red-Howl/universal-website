@@ -14,75 +14,50 @@ export default function NewProductPage() {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
-  const [files, setFiles] = useState([]); // Changed to array for multiple files
+  const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const router = useRouter();
 
 
   const handleFileChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
-    if (selectedFiles.length > 3) {
-      alert('You can only upload up to 3 images.');
-      return;
-    }
-    if (selectedFiles.length < 3) {
-      alert('You must upload exactly 3 images.');
-      return;
-    }
-    setFiles(selectedFiles);
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
   };
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (files.length !== 3) {
-      alert('Please select exactly 3 images to upload.');
+    if (!file) {
+      alert('Please select an image to upload.');
       return;
     }
 
-
     setUploading(true);
 
-
     try {
-      // Upload all images and collect their URLs
-      const imageUrls = [];
+      // Upload single image
+      const fileName = `${Date.now()}_${file.name}`;
 
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(fileName, file);
 
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const fileName = `${Date.now()}_${i}_${file.name}`;
-
-
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('product-images')
-          .upload(fileName, file);
-
-
-        if (uploadError) {
-          throw uploadError;
-        }
-
-
-        const { data: urlData } = supabase.storage
-          .from('product-images')
-          .getPublicUrl(fileName);
-
-
-        imageUrls.push(urlData.publicUrl);
+      if (uploadError) {
+        throw uploadError;
       }
 
+      const { data: urlData } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(fileName);
 
-      // Insert the product data with imageUrls array
+      // Insert the product data with single imageUrl
       const { data: productData, error: insertError } = await supabase
         .from('products')
-        .insert([{ name, description, price, imageUrls, category }]);
-
+        .insert([{ name, description, price, imageUrl: urlData.publicUrl, category }]);
 
       if (insertError) {
         throw insertError;
       }
-
 
       router.push('/admin/products');
     } catch (error) {
@@ -91,7 +66,6 @@ export default function NewProductPage() {
       setUploading(false);
     }
   };
-
 
   return (
     <AdminLayout>
@@ -125,10 +99,10 @@ export default function NewProductPage() {
             <input type="text" id="category" value={category} onChange={(e) => setCategory(e.target.value)} required />
           </div>
           <div className="form-group">
-            <label htmlFor="images">Product Images (Exactly 3 required)</label>
-            <input type="file" id="images" accept="image/*" multiple onChange={handleFileChange} required />
+            <label htmlFor="image">Product Image</label>
+            <input type="file" id="image" accept="image/*" onChange={handleFileChange} required />
             <div className="file-info">
-              {files.length > 0 && `Selected ${files.length} image(s)`}
+              {file && `Selected: ${file.name}`}
             </div>
           </div>
           <button type="submit" className="save-btn" disabled={uploading}>
