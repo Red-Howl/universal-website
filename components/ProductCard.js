@@ -23,6 +23,12 @@ export default function ProductCard({ product }) {
           text-decoration: none;
           color: inherit;
         }
+        
+        @media (max-width: 768px) {
+          .card {
+            max-width: none;
+          }
+        }
         .card:hover {
           transform: translateY(-5px);
         }

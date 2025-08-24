@@ -307,8 +307,8 @@ export default function ShopPage() {
           }
 
           .products-grid {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
           }
         }
       `}</style>
