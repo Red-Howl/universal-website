@@ -1,11 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'; // Added useRef
 import { useRouter } from 'next/router';
 import { CartContext } from '../context/CartContext';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { supabase } from '../lib/supabase';
 
 export default function CheckoutPage() {
   const { cart, clearCart } = useContext(CartContext);

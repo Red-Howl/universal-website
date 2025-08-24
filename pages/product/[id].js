@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { createClient } from '@supabase/supabase-js';
 import { CartContext } from '../../context/CartContext';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { supabase } from '../../lib/supabase';
 
 export default function ProductDetailPage({ initialProduct }) {
   const router = useRouter();
@@ -188,6 +184,11 @@ export default function ProductDetailPage({ initialProduct }) {
 }
 
 export async function getStaticPaths() {
+  const { createClient } = require('@supabase/supabase-js');
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  
   const { data, error } = await supabase.from('products').select('id');
 
   if (error) {
@@ -203,6 +204,11 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
+  const { createClient } = require('@supabase/supabase-js');
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  
   const { id } = params;
   const { data, error } = await supabase
     .from('products')
@@ -212,13 +218,12 @@ export async function getStaticProps({ params }) {
 
   if (error) {
     console.error('Error fetching product for static props:', error);
-    return { props: { initialProduct: null }, revalidate: 10 };
+    return { props: { initialProduct: null } };
   }
 
   return {
     props: {
       initialProduct: data,
     },
-    revalidate: 10, // Revalidate every 10 seconds
   };
 }

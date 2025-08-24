@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
-import { createClient } from '@supabase/supabase-js';
-
-// Initialize the Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { supabase } from '../lib/supabase';
 
 export default function ShopPage({ initialProducts }) {
   const [products, setProducts] = useState(initialProducts || []);
@@ -332,6 +327,7 @@ export default function ShopPage({ initialProducts }) {
 // This function fetches data at build time for static generation
 export async function getStaticProps() {
   try {
+    const { createClient } = require('@supabase/supabase-js');
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -352,7 +348,6 @@ export async function getStaticProps() {
       props: {
         initialProducts: data || [],
       },
-      revalidate: 60, // Re-generate page every 60 seconds if needed
     };
   } catch (error) {
     console.error('Error in getStaticProps:', error);
@@ -360,7 +355,6 @@ export async function getStaticProps() {
       props: {
         initialProducts: [],
       },
-      revalidate: 60,
     };
   }
 }
