@@ -209,8 +209,8 @@ export default function ShopPage() {
 
         .products-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-          gap: 2rem;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1.5rem;
           margin-bottom: 3rem;
         }
 
@@ -307,8 +307,8 @@ export default function ShopPage() {
           }
 
           .products-grid {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
           }
         }
       `}</style>
