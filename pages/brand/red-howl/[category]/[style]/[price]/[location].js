@@ -25,25 +25,7 @@ export default function Page(props) {
 }
 
 export async function getStaticPaths() {
-	const paths = [];
-	const prices = getPriceBands(10000, 500);
-	const categories = ['sarees', 'kurtas', 'blouses', 'handbags', 'shoes'];
-	categories.forEach((category) => {
-		let styles = [];
-		if (category === 'sarees') {
-			styles = SAREE_KINDS;
-		} else {
-			styles = CATEGORY_STYLES[category] || [];
-		}
-		styles.forEach((style) => {
-			prices.forEach((p) => {
-				LOCATIONS.forEach((loc) => {
-					paths.push({ params: { category, style, price: `under-${p}`, location: loc } });
-				});
-			});
-		});
-	});
-	return { paths, fallback: false };
+	return { paths: [], fallback: 'blocking' };
 }
 
 export async function getStaticProps({ params }) {
@@ -61,7 +43,7 @@ export async function getStaticProps({ params }) {
 	const longDescription = buildLongDescription({ category, style, price, location });
 	const heroImage = `/replit.svg`; // placeholder image available in public
 	const content = { ...baseContent, longDescription, heroImage };
-	return { props: { seo: { title, description, canonical, og: { title, description } }, shopUrl, content } };
+	return { props: { seo: { title, description, canonical, og: { title, description } }, shopUrl, content }, revalidate: 86400 };
 }
 
 
