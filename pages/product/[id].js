@@ -37,13 +37,11 @@ export default function ProductDetailPage() {
   const handleBuyNow = async () => {
     const remainingQuantity = product.quantity - (product.ordered_quantity || 0);
     if (remainingQuantity === 0) {
-      alert('This product is currently out of stock.');
       return;
     }
     
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-      alert('Please log in to buy this item.');
       router.push('/login');
     } else {
       addToCart(product);
@@ -54,11 +52,9 @@ export default function ProductDetailPage() {
   const handleAddToCart = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-      alert('Please log in to add items to your cart.');
       router.push('/login');
     } else {
       addToCart(product);
-      alert(`${product.name} has been added to your cart!`);
     }
   };
 
