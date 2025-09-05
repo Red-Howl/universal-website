@@ -108,7 +108,7 @@ export default function ShopPage() {
         <meta property="og:description" content="Discover Red Howl's exclusive collection of hand-painted fashion, Kalamkari sarees, and premium clothing." />
         <meta property="og:url" content="https://redhowlcollections.netlify.app/shop" />
         <meta property="og:type" content="website" />
-        <meta name="google-site-verification" content="g641qoDYIn4W2lsXVPnmNV666txLhQL0EFiHqxuJTAU" />
+        <meta name="google-site-verification" content="1bXoHwpk_IA_nYS6maRqWUyzs7PbOwg8VCLTffP92mg" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
