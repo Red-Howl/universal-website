@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://redhowlcollections.netlify.app/sitemap.xml

@@ -4,7 +4,11 @@ export async function getServerSideProps({ res }) {
 		'/',
 		'/shop',
 		'/about',
-		'/contact'
+		'/contact',
+		'/brand/red-howl/sarees/kota-doria/under-1500/basavanagudi',
+		'/brand/red-howl/jackets/denim/under-500/bangalore',
+		'/blog/sarees/pattu/under-2000/mumbai',
+		'/blog/jackets/denim/under-500/bangalore'
 	];
 
 	const urls = staticUrls
