@@ -100,9 +100,9 @@ export default function ShopPage() {
   return (
     <>
       <Head>
-        <title>Red Howl Collection | Hand Painted Fashion & Kalamkari | Premium Clothing</title>
-        <meta name="description" content="Discover Red Howl's exclusive collection of hand-painted fashion, Kalamkari sarees, and premium clothing. Where art meets fashion with authentic Indian craftsmanship." />
-        <meta name="keywords" content="Red Howl, hand painted fashion, Kalamkari, sarees, premium clothing, Indian fashion, art meets fashion" />
+        <title>Red Howl Collection | Shirts, Tshirts, Jackets, Sarees, Kurtas, Handbags | Premium Clothing</title>
+        <meta name="description" content="Shop Red Howl's exclusive collection: shirts, tshirts, jackets, hoodies, sarees, kurtas, blouses, handbags, shoes. Hand-painted fashion & Kalamkari clothing with authentic Indian craftsmanship." />
+        <meta name="keywords" content="shirts, tshirts, jackets, hoodies, sarees, kurtas, blouses, handbags, shoes, Red Howl, hand painted fashion, Kalamkari, premium clothing, Indian fashion, art meets fashion, clothing online, fashion store" />
         <link rel="canonical" href="https://redhowlcollections.netlify.app/shop" />
         <meta property="og:title" content="Red Howl Collection | Hand Painted Fashion & Kalamkari" />
         <meta property="og:description" content="Discover Red Howl's exclusive collection of hand-painted fashion, Kalamkari sarees, and premium clothing." />

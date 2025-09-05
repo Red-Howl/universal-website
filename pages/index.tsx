@@ -12,8 +12,8 @@ export default function HomePage() {
   return (
     <>
       <Head>
-        <title>Red Howl | Hand Painted Fashion & Kalamkari | Premium Clothing</title>
-        <meta name="description" content="Discover Red Howl's exclusive collection of hand-painted fashion, Kalamkari sarees, and premium clothing. Where art meets fashion with authentic Indian craftsmanship." />
+        <title>Red Howl | Shirts, Tshirts, Jackets, Sarees, Kurtas, Handbags | Premium Clothing Store</title>
+        <meta name="description" content="Shop Red Howl's exclusive collection: shirts, tshirts, jackets, hoodies, sarees, kurtas, blouses, handbags, shoes. Hand-painted fashion & Kalamkari clothing with authentic Indian craftsmanship." />
         <meta name="google-site-verification" content="g641qoDYIn4W2lsXVPnmNV666txLhQL0EFiHqxuJTAU" />
         <link rel="canonical" href="https://redhowlcollections.netlify.app/" />
       </Head>
