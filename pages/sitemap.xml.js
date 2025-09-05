@@ -1,5 +1,5 @@
 export async function getServerSideProps({ res }) {
-	const baseUrl = 'https://www.kalamkar.art';
+	const baseUrl = 'https://redhowlcollections.netlify.app';
 	const staticUrls = [
 		'/',
 		'/shop',
