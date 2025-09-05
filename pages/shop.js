@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
 import ProductCard from '../components/ProductCard';
 
@@ -98,6 +99,36 @@ export default function ShopPage() {
 
   return (
     <>
+      <Head>
+        <title>Red Howl Collection | Hand Painted Fashion & Kalamkari | Premium Clothing</title>
+        <meta name="description" content="Discover Red Howl's exclusive collection of hand-painted fashion, Kalamkari sarees, and premium clothing. Where art meets fashion with authentic Indian craftsmanship." />
+        <meta name="keywords" content="Red Howl, hand painted fashion, Kalamkari, sarees, premium clothing, Indian fashion, art meets fashion" />
+        <link rel="canonical" href="https://theredhowl.netlify.app/shop" />
+        <meta property="og:title" content="Red Howl Collection | Hand Painted Fashion & Kalamkari" />
+        <meta property="og:description" content="Discover Red Howl's exclusive collection of hand-painted fashion, Kalamkari sarees, and premium clothing." />
+        <meta property="og:url" content="https://theredhowl.netlify.app/shop" />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": "Red Howl Collection",
+            "description": "Discover Red Howl's exclusive collection of hand-painted fashion, Kalamkari sarees, and premium clothing.",
+            "url": "https://theredhowl.netlify.app/shop",
+            "isPartOf": {
+              "@type": "WebSite",
+              "name": "Red Howl",
+              "url": "https://theredhowl.netlify.app"
+            },
+            "about": ["Hand Painted Fashion", "Kalamkari", "Premium Clothing", "Indian Fashion"],
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://theredhowl.netlify.app/shop{?q}",
+              "query-input": "required name=q"
+            }
+          })}
+        </script>
+      </Head>
       <style jsx>{`
         .shop-page-luxury {
           min-height: 100vh;
@@ -316,7 +347,7 @@ export default function ShopPage() {
 
       <div className="shop-page-luxury page-fade-in">
         <div className="shop-header-content slide-in-down">
-          <h1 className="shop-title">Our Collection</h1>
+          <h1 className="shop-title">Red Howl Collection</h1>
           <p className="shop-subtitle">&quot;Where Art Meets Fashion&quot;</p>
         </div>
 
