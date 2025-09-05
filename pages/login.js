@@ -56,39 +56,98 @@ export default function LoginPage() {
     <>
       <style jsx>{`
         /* Styles are the same */
-        .login-container { max-width: 400px; margin: 4rem auto; padding: 2rem; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .title { text-align: center; font-family: var(--font-playfair); color: var(--color-primary-teal); }
+        .login-container { 
+          max-width: 400px; 
+          margin: 4rem auto; 
+          padding: 2rem; 
+          border: 1px solid var(--color-border); 
+          border-radius: 12px; 
+          box-shadow: var(--shadow-medium); 
+          background: var(--color-card-bg);
+        }
+        .title { 
+          text-align: center; 
+          font-family: var(--font-playfair); 
+          color: var(--color-dark-grey); 
+          margin-bottom: 2rem;
+        }
         .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; }
-        .form-group input { width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 5px; }
-        .submit-btn { width: 100%; padding: 1rem; background-color: var(--color-primary-teal); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; }
-        .toggle-text { text-align: center; margin-top: 1rem; font-size: 0.9rem; }
-        .toggle-text span { color: var(--color-primary-teal); font-weight: bold; cursor: pointer; }
+        .form-group label { 
+          display: block; 
+          margin-bottom: 0.5rem; 
+          color: var(--color-dark-grey);
+          font-weight: 500;
+        }
+        .form-group input { 
+          width: 100%; 
+          padding: 0.8rem; 
+          border: 2px solid var(--color-border); 
+          border-radius: 8px; 
+          transition: all 0.3s ease;
+          background: var(--color-light-grey);
+        }
+        .form-group input:focus {
+          outline: none;
+          border-color: var(--color-primary);
+          box-shadow: 0 0 0 3px rgba(74, 85, 104, 0.1);
+        }
+        .submit-btn { 
+          width: 100%; 
+          padding: 1rem; 
+          background-color: var(--color-primary); 
+          color: var(--color-dark-grey); 
+          border: none; 
+          border-radius: 8px; 
+          cursor: pointer; 
+          font-size: 1rem; 
+          font-weight: 600;
+          transition: all 0.3s ease;
+          box-shadow: var(--shadow-light);
+        }
+        .submit-btn:hover {
+          background-color: var(--color-accent);
+          box-shadow: var(--shadow-medium);
+        }
+        .toggle-text { 
+          text-align: center; 
+          margin-top: 1rem; 
+          font-size: 0.9rem; 
+          color: var(--color-secondary);
+        }
+        .toggle-text span { 
+          color: var(--color-primary); 
+          font-weight: bold; 
+          cursor: pointer; 
+          transition: color 0.3s ease;
+        }
+        .toggle-text span:hover {
+          color: var(--color-accent);
+        }
         .message, .error-message { text-align: center; margin-top: 1rem; }
-        .message { color: green; }
-        .error-message { color: red; }
+        .message { color: var(--color-success); }
+        .error-message { color: var(--color-error); }
       `}</style>
-      <div className="login-container">
-        <h1 className="title">{isSignUp ? 'Create Account' : 'Login'}</h1>
-        <form onSubmit={handleSubmit}>
+      <div className="login-container page-fade-in card-animate">
+        <h1 className="title slide-in-down">{isSignUp ? 'Create Account' : 'Login'}</h1>
+        <form onSubmit={handleSubmit} className="stagger-animation">
 
           {/* --- NEW: This field only shows in signup mode --- */}
           {isSignUp && (
             <div className="form-group">
               <label htmlFor="fullName">Full Name</label>
-              <input type="text" id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
+              <input type="text" id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} required className="input-animate" />
             </div>
           )}
 
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="input-animate" />
           </div>
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="input-animate" />
           </div>
-          <button type="submit" className="submit-btn">{isSignUp ? 'Sign Up' : 'Login'}</button>
+          <button type="submit" className="submit-btn btn-animate">{isSignUp ? 'Sign Up' : 'Login'}</button>
 
           {error && <p className="error-message">{error}</p>}
           {message && <p className="message">{message}</p>}

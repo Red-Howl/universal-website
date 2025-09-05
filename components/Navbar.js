@@ -16,8 +16,7 @@ export default function Navbar({ siteSettings }) {
 
   // States for notifications
   const [notifications, setNotifications] = useState([]);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [hasUnread, setHasUnread] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     async function getUser() {
@@ -35,10 +34,9 @@ export default function Navbar({ siteSettings }) {
         const { data } = await supabase.from('notifications').select('*').order('created_at', { ascending: false });
         if (data) {
             setNotifications(data);
-            const lastSeenNotifId = localStorage.getItem('lastSeenNotifId');
-            if (data.length > 0 && data[0].id > (parseInt(lastSeenNotifId) || 0)) {
-                setHasUnread(true);
-            }
+            // Count unread notifications (notifications that haven't been marked as read)
+            const unread = data.filter(notif => !notif.is_read);
+            setUnreadCount(unread.length);
         }
     }
     fetchNotifications();
@@ -48,19 +46,38 @@ export default function Navbar({ siteSettings }) {
     };
   }, []);
 
+  // Apply dynamic CSS variables from site settings (theme colors)
+  useEffect(() => {
+    if (!siteSettings) return;
+    const root = document.documentElement;
+    const map = {
+      'color_primary': '--cfg-color-primary',
+      'color_secondary': '--cfg-color-secondary',
+      'color_accent': '--cfg-color-accent',
+      'color_light_grey': '--cfg-color-light-grey',
+      'color_medium_grey': '--cfg-color-medium-grey',
+      'color_dark_grey': '--cfg-color-dark-grey',
+      'color_border': '--cfg-color-border',
+      'color_hover': '--cfg-color-hover',
+      'color_success': '--cfg-color-success',
+      'color_error': '--cfg-color-error',
+      'color_warning': '--cfg-color-warning',
+      'color_white': '--cfg-color-white',
+      'color_black': '--cfg-color-black',
+      'color_card_bg': '--cfg-color-card-bg',
+      'color_page_bg': '--cfg-color-page-bg'
+    };
+    Object.entries(map).forEach(([key, cssVar]) => {
+      if (siteSettings[key]) root.style.setProperty(cssVar, siteSettings[key]);
+    });
+  }, [siteSettings]);
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push('/');
   };
 
-  // Function to handle bell click
-  const handleBellClick = () => {
-      setShowNotifications(!showNotifications);
-      if (notifications.length > 0) {
-          localStorage.setItem('lastSeenNotifId', notifications[0].id);
-          setHasUnread(false);
-      }
-  }
+  // Remove the handleBellClick function since we're now using Link
 
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   
@@ -78,10 +95,11 @@ export default function Navbar({ siteSettings }) {
           align-items: center;
           justify-content: space-between;
           padding: 1rem 2rem;
-          background-color: var(--color-background-cream);
-          border-bottom: 1px solid #eee;
+          background-color: var(--color-card-bg);
+          border-bottom: 1px solid var(--color-border);
           font-family: var(--font-lato);
           position: relative;
+          box-shadow: var(--shadow-light);
         }
 
         .logo-container {
@@ -106,13 +124,14 @@ export default function Navbar({ siteSettings }) {
 
         .brand-link {
           text-decoration: none;
-          color: var(--color-primary-teal);
+          color: var(--color-dark-grey);
         }
 
         .logo-text {
           font-size: 1.8rem;
           font-weight: normal;
           font-family: var(--font-playfair);
+          color: var(--color-dark-grey);
         }
 
         .nav-items {
@@ -124,14 +143,15 @@ export default function Navbar({ siteSettings }) {
         }
 
         .nav-items a {
-          color: #2c2c2c;
+          color: var(--color-dark-grey);
           text-decoration: none;
           font-weight: normal;
           font-size: 1rem;
+          transition: color 0.3s ease;
         }
 
         .nav-items a:hover {
-          color: var(--color-primary-teal);
+          color: var(--color-primary);
         }
 
         .logout-btn {
@@ -140,22 +160,28 @@ export default function Navbar({ siteSettings }) {
           cursor: pointer;
           font-family: inherit;
           font-size: 1rem;
-          color: #2c2c2c;
+          color: var(--color-dark-grey);
           font-weight: normal;
+          transition: color 0.3s ease;
         }
 
         .logout-btn:hover {
-          color: var(--color-primary-teal);
+          color: var(--color-primary);
         }
 
         .cart-container {
           position: relative;
-          color: #2c2c2c;
+          color: var(--color-dark-grey);
           text-decoration: none;
           font-weight: normal;
           display: flex;
           align-items: center;
           gap: 0.3rem;
+          transition: color 0.3s ease;
+        }
+
+        .cart-container.has-items {
+          color: var(--color-primary) !important;
         }
 
         .cart-count {
@@ -182,17 +208,37 @@ export default function Navbar({ siteSettings }) {
           cursor: pointer;
           position: relative;
           font-size: 1.5rem;
+          text-decoration: none;
+          color: #2c2c2c;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
         }
 
-        .unread-dot {
-          position: absolute;
-          top: 0px;
-          right: 0px;
-          width: 8px;
-          height: 8px;
-          background-color: red;
-          border-radius: 50%;
+        .notification-bell:hover {
+          transform: scale(1.1);
+          color: var(--color-primary-teal);
         }
+
+        .notification-count {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background-color: #EF4444;
+          color: white;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          font-size: 0.7rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          animation: pulse 2s infinite;
+        }
+
+
 
         .notifications-dropdown {
           position: absolute;
@@ -249,58 +295,51 @@ export default function Navbar({ siteSettings }) {
         }
       `}</style>
 
-      <nav className="nav">
+      <nav className="nav slide-in-down">
         <div className="logo-container">
           {siteSettings?.logo_url && (
-            <img src={siteSettings.logo_url} alt="Kalamkar Logo" className="logo-img" />
+            <img src={siteSettings.logo_url} alt="Kalamkar Logo" className="logo-img scale-on-hover" />
           )}
         </div>
         
         <div className="center-brand">
-          <Link href="/" className="brand-link">
+          <Link href="/" className="brand-link scale-on-hover">
             <span className="logo-text">Kalamkar</span>
           </Link>
         </div>
 
-        <div className="nav-items">
+        <div className="nav-items stagger-animation">
           {user ? (
-            <Link href="/account/orders">My Account</Link>
+            <Link href="/account/orders" className="btn-animate">My Account</Link>
           ) : (
-            <Link href="/login">Login</Link>
+            <Link href="/login" className="btn-animate">Login</Link>
           )}
           
-          <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+          <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn-animate">
              Custom order
           </a>
           
-          <Link href="/shop">Shop</Link>
+          <Link href="/shop" className="btn-animate">Shop</Link>
           
-          <Link href="/cart" className="cart-container">
+          <Link 
+            href="/cart" 
+            className={`cart-container btn-animate ${itemCount > 0 ? 'has-items' : ''}`}
+            style={{ color: itemCount > 0 ? 'var(--color-primary)' : 'var(--color-dark-grey)' }}
+          >
            Cart
-            {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
           </Link>
 
           <div className="notifications-container">
-            <div className="notification-bell" onClick={handleBellClick}>
+            <Link href="/notifications" className="notification-bell bounce-animate">
               <span>🔔</span>
-              {hasUnread && <div className="unread-dot"></div>}
-            </div>
-            {showNotifications && (
-              <div className="notifications-dropdown">
-                {notifications.length > 0 ? (
-                  notifications.map(notif => (
-                    <div key={notif.id} className="notification-item">
-                      <p>{notif.message}</p>
-                      <p className="notification-date">{new Date(notif.created_at).toLocaleDateString()}</p>
-                    </div>
-                  ))
-                ) : <div className="notification-item">No new announcements.</div>}
-              </div>
-            )}
+              {unreadCount > 0 && (
+                <span className="notification-count pulse-animate">{unreadCount}</span>
+              )}
+            </Link>
           </div>
 
           {user && (
-            <button onClick={handleLogout} className="logout-btn">Logout</button>
+            <button onClick={handleLogout} className="logout-btn btn-animate">Logout</button>
           )}
         </div>
       </nav>

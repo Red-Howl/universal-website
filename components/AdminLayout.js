@@ -34,11 +34,12 @@ export default function AdminLayout({ children }) {
     <>
     <style jsx>{`
       /* Same styles as before */
-      .admin-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: #333; color: white; }
+      .admin-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: var(--color-black); color: var(--color-dark-grey); }
       .admin-nav { display: flex; gap: 1.5rem; align-items: center; }
-      .admin-nav a { color: white; text-decoration: none; font-weight: bold; }
+      .admin-nav a { color: var(--color-dark-grey); text-decoration: none; font-weight: bold; }
+      .admin-nav a:hover { color: var(--color-secondary); }
       .right-section { display: flex; align-items: center; gap: 1.5rem; }
-      .logout-btn { background-color: var(--color-accent-gold); color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; }
+      .logout-btn { background-color: var(--color-primary); color: var(--color-dark-grey); border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; }
     `}</style>
     <div>
         <header className="admin-header">

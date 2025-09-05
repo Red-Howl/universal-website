@@ -1,0 +1,299 @@
+/* Global Animation Styles */
+
+/* Button Animations */
+.btn-animate {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-animate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.btn-animate:active {
+  transform: translateY(0);
+  transition: all 0.1s ease;
+}
+
+.btn-animate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-animate:hover::before {
+  left: 100%;
+}
+
+/* Card Animations */
+.card-animate {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-animate:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+/* Input Field Animations */
+.input-animate {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.input-animate:focus {
+  transform: scale(1.02);
+  box-shadow: 0 0 20px rgba(74, 85, 104, 0.15);
+}
+
+/* Page Load Animations */
+.page-fade-in {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.stagger-animation > * {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-animation > *:nth-child(6) { animation-delay: 0.6s; }
+
+/* Hover Glow Effect */
+.glow-on-hover {
+  transition: all 0.3s ease;
+}
+
+.glow-on-hover:hover {
+  box-shadow: 0 0 20px rgba(74, 85, 104, 0.3);
+}
+
+/* Pulse Animation */
+.pulse-animate {
+  animation: pulse 2s infinite;
+}
+
+/* Bounce Animation */
+.bounce-animate {
+  transition: transform 0.3s ease;
+}
+
+.bounce-animate:hover {
+  animation: bounce 0.6s ease;
+}
+
+/* Slide Animations */
+.slide-in-left {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.6s ease-out;
+}
+
+.slide-in-up {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.slide-in-down {
+  animation: slideInDown 0.6s ease-out;
+}
+
+/* Icon Spin Animation */
+.spin-on-hover {
+  transition: transform 0.3s ease;
+}
+
+.spin-on-hover:hover {
+  transform: rotate(360deg);
+}
+
+/* Scale Animation */
+.scale-on-hover {
+  transition: transform 0.3s ease;
+}
+
+.scale-on-hover:hover {
+  transform: scale(1.1);
+}
+
+/* Shake Animation */
+.shake-on-hover:hover {
+  animation: shake 0.6s ease;
+}
+
+/* Loading Spinner */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40%, 43% {
+    transform: translateY(-15px);
+  }
+  70% {
+    transform: translateY(-7px);
+  }
+  90% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Form Validation Animations */
+.error-shake {
+  animation: shake 0.6s ease;
+  border-color: var(--color-error) !important;
+}
+
+.success-glow {
+  animation: successGlow 0.6s ease;
+}
+
+@keyframes successGlow {
+  0% {
+    box-shadow: 0 0 5px rgba(72, 187, 120, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(72, 187, 120, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(72, 187, 120, 0.5);
+  }
+}
+
+/* Mobile Responsive Animations */
+@media (max-width: 768px) {
+  .btn-animate:hover {
+    transform: translateY(-1px);
+  }
+  
+  .card-animate:hover {
+    transform: translateY(-3px) scale(1.01);
+  }
+  
+  .scale-on-hover:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .btn-animate,
+  .card-animate,
+  .input-animate,
+  .glow-on-hover,
+  .bounce-animate,
+  .scale-on-hover,
+  .spin-on-hover {
+    transition: none;
+    animation: none;
+  }
+  
+  .page-fade-in,
+  .slide-in-left,
+  .slide-in-right,
+  .slide-in-up,
+  .slide-in-down,
+  .stagger-animation > * {
+    animation: none;
+  }
+}

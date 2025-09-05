@@ -107,11 +107,12 @@ export default function ShopPage() {
 
         .shop-header-content {
           text-align: center;
-          padding: 1rem 0 1rem 0;
-          background: var(--color-white);
-          margin-bottom: rem;
+          padding: 2rem 0;
+          background: var(--color-card-bg);
+          margin-bottom: 2rem;
           position: relative;
           overflow: hidden;
+          box-shadow: var(--shadow-light);
         }
 
         .shop-header-content::before {
@@ -121,7 +122,7 @@ export default function ShopPage() {
           left: 0;
           right: 0;
           height: 1px;
-          background: var(--gradient-gold);
+          background: var(--color-border);
         }
 
         .shop-header-content::after {
@@ -131,14 +132,14 @@ export default function ShopPage() {
           left: 0;
           right: 0;
           height: 1px;
-          background: var(--gradient-gold);
+          background: var(--color-border);
         }
 
         .shop-title {
           font-family: var(--font-primary);
           font-size: 3.5rem;
           font-weight: 400;
-          color: var(--color-dark-gray);
+          color: var(--color-dark-grey);
           margin-bottom: 1rem;
           letter-spacing: 2px;
         }
@@ -147,7 +148,7 @@ export default function ShopPage() {
           font-family: var(--font-accent);
           font-size: 1.3rem;
           font-style: italic;
-          color: var(--color-gray);
+          color: var(--color-secondary);
           margin-bottom: 0;
           letter-spacing: 1px;
         }
@@ -159,12 +160,12 @@ export default function ShopPage() {
         }
 
         .filters-section {
-          background: var(--color-white);
+          background: var(--color-card-bg);
           padding: 2rem;
           border-radius: 20px;
-          box-shadow: var(--shadow-soft);
-          margin-bottom: 0;
-          border: 1px solid rgba(212, 175, 55, 0.1);
+          box-shadow: var(--shadow-light);
+          margin-bottom: 2rem;
+          border: 1px solid var(--color-border);
         }
 
         .filters-row {
@@ -183,7 +184,7 @@ export default function ShopPage() {
         .filter-label {
           font-family: var(--font-secondary);
           font-weight: 600;
-          color: var(--color-dark-gray);
+          color: var(--color-dark-grey);
           font-size: 0.9rem;
           text-transform: uppercase;
           letter-spacing: 0.5px;
@@ -191,11 +192,11 @@ export default function ShopPage() {
 
         .filter-select {
           padding: 0.8rem 1rem;
-          border: 2px solid rgba(212, 175, 55, 0.2);
+          border: 2px solid var(--color-border);
           border-radius: 10px;
           font-family: var(--font-secondary);
           font-size: 1rem;
-          background: var(--color-white);
+          background: var(--color-light-grey);
           color: var(--color-dark-gray);
           transition: var(--transition-smooth);
           cursor: pointer;
@@ -313,19 +314,19 @@ export default function ShopPage() {
         }
       `}</style>
 
-      <div className="shop-page-luxury">
-        <div className="shop-header-content">
+      <div className="shop-page-luxury page-fade-in">
+        <div className="shop-header-content slide-in-down">
           <h1 className="shop-title">Our Collection</h1>
-          <p className="shop-subtitle">"Where Art Meets Fashion"</p>
+          <p className="shop-subtitle">&quot;Where Art Meets Fashion&quot;</p>
         </div>
 
         <div className="shop-container">
-          <div className="filters-section">
-            <div className="filters-row">
+          <div className="filters-section slide-in-left">
+            <div className="filters-row stagger-animation">
               <div className="filter-group">
                 <label className="filter-label">Category</label>
                 <select 
-                  className="filter-select"
+                  className="filter-select input-animate"
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                 >
@@ -340,7 +341,7 @@ export default function ShopPage() {
               <div className="filter-group">
                 <label className="filter-label">Sort By</label>
                 <select 
-                  className="filter-select"
+                  className="filter-select input-animate"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                 >
@@ -354,17 +355,19 @@ export default function ShopPage() {
           </div>
 
           {filteredProducts.length > 0 ? (
-            <div className="products-grid">
-              {filteredProducts.map(product => (
-                <ProductCard key={product.id} product={product} />
+            <div className="products-grid stagger-animation">
+              {filteredProducts.map((product, index) => (
+                <div key={product.id} className="card-animate" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <ProductCard product={product} />
+                </div>
               ))}
             </div>
           ) : (
-            <div className="no-products">
-              <div className="no-products-icon">🎨</div>
+            <div className="no-products slide-in-up">
+              <div className="no-products-icon bounce-animate">🎨</div>
               <h3 className="no-products-title">No Products Found</h3>
               <p className="no-products-text">
-                We couldn't find any products matching your criteria. 
+                We couldn&apos;t find any products matching your criteria. 
                 Try adjusting your filters or check back soon for new arrivals.
               </p>
             </div>

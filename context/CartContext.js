@@ -6,6 +6,7 @@ export const CartContext = createContext({
   addToCart: () => {},
   removeFromCart: () => {},
   clearCart: () => {},
+  updateQuantity: () => {},
 });
 
 export const CartProvider = ({ children }) => {
@@ -51,7 +52,20 @@ export const CartProvider = ({ children }) => {
     setCart([]);
   };
 
-  const value = { cart, addToCart, removeFromCart, clearCart };
+  const updateQuantity = (productId, newQuantity) => {
+    if (newQuantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+    
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === productId ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+
+  const value = { cart, addToCart, removeFromCart, clearCart, updateQuantity };
 
   return (
     <CartContext.Provider value={value}>

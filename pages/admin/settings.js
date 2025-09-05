@@ -15,6 +15,27 @@ export default function AdminSettingsPage() {
   const [logoMessage, setLogoMessage] = useState('');
   const [settingsMessage, setSettingsMessage] = useState('');
   const [passwordMessage, setPasswordMessage] = useState('');
+  
+  // Theme color configuration: key in site_settings -> description (what it changes)
+  const THEME_COLORS = [
+    { key: 'color_primary', label: 'Primary', desc: 'Links hover, active accents, highlight states.' },
+    { key: 'color_secondary', label: 'Secondary', desc: 'Sub-accents and subtle highlights.' },
+    { key: 'color_accent', label: 'Accent', desc: 'Accent backgrounds like table headers.' },
+    { key: 'color_light_grey', label: 'Light Grey (bg-1)', desc: 'Primary dark page section background.' },
+    { key: 'color_medium_grey', label: 'Medium Grey (bg-2)', desc: 'Cards/containers background.' },
+    { key: 'color_dark_grey', label: 'Text (Light on Dark)', desc: 'Main text color on dark backgrounds.' },
+    { key: 'color_border', label: 'Border', desc: 'Borders and dividers across the UI.' },
+    { key: 'color_hover', label: 'Hover', desc: 'Generic hover background/foreground shade.' },
+    { key: 'color_success', label: 'Success', desc: 'Success badges/messages (green).' },
+    { key: 'color_error', label: 'Error', desc: 'Errors, destructive buttons, alerts (red).' },
+    { key: 'color_warning', label: 'Warning', desc: 'Warnings, caution labels (orange).' },
+    { key: 'color_white', label: 'Surface (dark “white”)', desc: 'Surface color replacing pure white in dark theme.' },
+    { key: 'color_black', label: 'Base Dark', desc: 'Base darkest shade for headers/deep backgrounds.' },
+    { key: 'color_card_bg', label: 'Card Background', desc: 'Cards, panels, nav bars background.' },
+    { key: 'color_page_bg', label: 'Page Background', desc: 'Overall page background.' }
+  ];
+
+  const [currentColors, setCurrentColors] = useState({});
 
   useEffect(() => {
     async function fetchSettings() {
@@ -25,28 +46,83 @@ export default function AdminSettingsPage() {
           return acc;
         }, {});
         setSettings(settingsObject);
+        // Apply theme immediately on load and capture current colors
+        applyTheme(settingsObject);
+        captureComputedTheme();
       }
     }
     fetchSettings();
   }, []);
 
+  function applyTheme(currentSettings) {
+    if (typeof window === 'undefined') return;
+    const root = document.documentElement;
+    const map = {
+      'color_primary': '--cfg-color-primary',
+      'color_secondary': '--cfg-color-secondary',
+      'color_accent': '--cfg-color-accent',
+      'color_light_grey': '--cfg-color-light-grey',
+      'color_medium_grey': '--cfg-color-medium-grey',
+      'color_dark_grey': '--cfg-color-dark-grey',
+      'color_border': '--cfg-color-border',
+      'color_hover': '--cfg-color-hover',
+      'color_success': '--cfg-color-success',
+      'color_error': '--cfg-color-error',
+      'color_warning': '--cfg-color-warning',
+      'color_white': '--cfg-color-white',
+      'color_black': '--cfg-color-black',
+      'color_card_bg': '--cfg-color-card-bg',
+      'color_page_bg': '--cfg-color-page-bg'
+    };
+    Object.entries(map).forEach(([key, cssVar]) => {
+      if (currentSettings[key]) root.style.setProperty(cssVar, currentSettings[key]);
+    });
+    // After applying, capture the effective values
+    captureComputedTheme();
+  }
+
+  function captureComputedTheme() {
+    if (typeof window === 'undefined') return;
+    const cs = getComputedStyle(document.documentElement);
+    const snapshot = {
+      color_primary: cs.getPropertyValue('--color-primary').trim(),
+      color_secondary: cs.getPropertyValue('--color-secondary').trim(),
+      color_accent: cs.getPropertyValue('--color-accent').trim(),
+      color_light_grey: cs.getPropertyValue('--color-light-grey').trim(),
+      color_medium_grey: cs.getPropertyValue('--color-medium-grey').trim(),
+      color_dark_grey: cs.getPropertyValue('--color-dark-grey').trim(),
+      color_border: cs.getPropertyValue('--color-border').trim(),
+      color_hover: cs.getPropertyValue('--color-hover').trim(),
+      color_success: cs.getPropertyValue('--color-success').trim(),
+      color_error: cs.getPropertyValue('--color-error').trim(),
+      color_warning: cs.getPropertyValue('--color-warning').trim(),
+      color_white: cs.getPropertyValue('--color-white').trim(),
+      color_black: cs.getPropertyValue('--color-black').trim(),
+      color_card_bg: cs.getPropertyValue('--color-card-bg').trim(),
+      color_page_bg: cs.getPropertyValue('--color-page-bg').trim()
+    };
+    setCurrentColors(snapshot);
+  }
+
   const handleSettingChange = (e) => {
     const { name, value } = e.target;
-    setSettings(prev => ({ ...prev, [name]: value }));
+    const next = { ...settings, [name]: value };
+    setSettings(next);
+    // If it's a theme color, apply live as you type/paste
+    applyTheme(next);
+    captureComputedTheme();
   };
 
   const handleUpdateSettings = async (e) => {
     e.preventDefault();
     setSettingsMessage('');
-    const updatePromises = Object.keys(settings).map(key =>
-      supabase.from('site_settings').update({ setting_value: settings[key] }).eq('setting_name', key)
-    );
-    const results = await Promise.all(updatePromises);
-    const hasError = results.some(res => res.error && res.error.message !== 'No rows found');
-    if (hasError) {
-      setSettingsMessage('Error updating some settings.');
-    } else {
+    // Use upsert so new settings keys (like theme colors) are created if missing
+    const rows = Object.keys(settings).map(key => ({ setting_name: key, setting_value: settings[key] }));
+    const { error } = await supabase.from('site_settings').upsert(rows, { onConflict: 'setting_name' });
+    if (error) setSettingsMessage('Error updating settings: ' + error.message);
+    else {
       setSettingsMessage('Settings updated successfully!');
+      applyTheme(settings);
     }
   };
 
@@ -143,6 +219,43 @@ export default function AdminSettingsPage() {
             <div className="form-group"><label>YouTube URL</label><input type="url" name="social_youtube" value={settings.social_youtube || ''} onChange={handleSettingChange} /></div>
             <button type="submit" className="save-btn">Save General Settings</button>
             {settingsMessage && <p className="message">{settingsMessage}</p>}
+          </form>
+        </div>
+
+        {/* Theme Colors */}
+        <div className="form-section">
+          <h2>Theme Colors</h2>
+          <p style={{marginBottom: '1rem'}}>Pick any color code to instantly theme the site. You can paste hex codes (e.g., #6b7280) or use the picker.</p>
+          <form onSubmit={handleUpdateSettings}>
+            {THEME_COLORS.map(({ key, label, desc }) => (
+              <div className="form-group" key={key} style={{display: 'grid', gridTemplateColumns: '240px 56px 1fr', alignItems: 'center', gap: '12px'}}>
+                <label style={{minWidth: '220px'}}>
+                  {label}
+                  <div style={{ fontSize: '0.8rem', color: '#9aa0a6' }}>{desc}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                    <span style={{ fontSize: '0.8rem', color: '#9aa0a6' }}>Current:</span>
+                    <span title={currentColors[key] || ''} style={{ display: 'inline-block', width: 18, height: 18, borderRadius: 3, border: '1px solid #333', background: currentColors[key] || 'transparent' }} />
+                    <code style={{ fontSize: '0.8rem', color: '#9aa0a6' }}>{currentColors[key] || '—'}</code>
+                  </div>
+                </label>
+                <input
+                  type="color"
+                  value={/^#([0-9a-fA-F]{3}){1,2}$/.test(settings[key] || '') ? settings[key] : (currentColors[key] || '#6b7280')}
+                  onChange={(e) => setSettings(prev => ({ ...prev, [key]: e.target.value }))}
+                  style={{width: '48px', height: '36px', padding: 0, border: 'none', background: 'transparent'}}
+                  title={`Pick color for ${label}`}
+                />
+                <input
+                  type="text"
+                  name={key}
+                  value={settings[key] || ''}
+                  onChange={handleSettingChange}
+                  placeholder="#000000 or any valid CSS color"
+                  style={{flex: 1}}
+                />
+              </div>
+            ))}
+            <button type="submit" className="save-btn">Save Theme Colors</button>
           </form>
         </div>
 

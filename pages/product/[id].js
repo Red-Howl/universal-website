@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { createClient } from '@supabase/supabase-js';
 import { CartContext } from '../../context/CartContext';
+import RecommendedProducts from '../../components/RecommendedProducts';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -34,6 +35,12 @@ export default function ProductDetailPage() {
   }, [id]);
 
   const handleBuyNow = async () => {
+    const remainingQuantity = product.quantity - (product.ordered_quantity || 0);
+    if (remainingQuantity === 0) {
+      alert('This product is currently out of stock.');
+      return;
+    }
+    
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       alert('Please log in to buy this item.');
@@ -53,6 +60,11 @@ export default function ProductDetailPage() {
       addToCart(product);
       alert(`${product.name} has been added to your cart!`);
     }
+  };
+
+  const handleRecommendedProductClick = (recommendedProduct) => {
+    // Track user interaction with recommended product
+    console.log('User clicked recommended product:', recommendedProduct.name);
   };
 
   const nextImage = () => {
@@ -82,7 +94,18 @@ export default function ProductDetailPage() {
   return (
     <>
       <style jsx>{`
-        .product-container { display: flex; flex-direction: column; max-width: 1200px; margin: 2rem auto; padding: 2rem; gap: 2rem; }
+        .product-container { 
+          display: flex; 
+          flex-direction: column; 
+          max-width: 1200px; 
+          margin: 2rem auto; 
+          padding: 2rem; 
+          gap: 2rem; 
+          background: var(--color-card-bg);
+          border-radius: 20px;
+          box-shadow: var(--shadow-light);
+          border: 1px solid var(--color-border);
+        }
         .product-image-container { flex: 1; position: relative; }
         .image-slider {
           position: relative;
@@ -127,17 +150,46 @@ export default function ProductDetailPage() {
           width: 12px;
           height: 12px;
           border-radius: 50%;
-          background-color: #ccc;
+          background-color: var(--color-border);
           cursor: pointer;
           transition: background-color 0.2s;
         }
         .dot.active {
-          background-color: var(--color-primary-teal);
+          background-color: var(--color-primary);
         }
         .product-details-container { flex: 1; }
-        .product-name { font-family: var(--font-playfair); font-size: 2.5rem; margin-bottom: 1rem; }
-        .product-price { font-size: 1.8rem; color: var(--color-primary-teal); margin-bottom: 1.5rem; }
-        .product-description { font-family: var(--font-lato); line-height: 1.6; margin-bottom: 2rem; }
+        .product-name { 
+          font-family: var(--font-playfair); 
+          font-size: 2.5rem; 
+          margin-bottom: 1rem; 
+          color: var(--color-dark-grey);
+        }
+        .product-price { 
+          font-size: 1.8rem; 
+          color: var(--color-black); 
+          margin-bottom: 1.5rem; 
+          font-weight: 600;
+        }
+        .product-description { 
+          font-family: var(--font-lato); 
+          line-height: 1.6; 
+          margin-bottom: 2rem; 
+          color: var(--color-secondary);
+        }
+        .out-of-stock-simple {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+        }
+        .out-of-stock-icon {
+          font-size: 1.2rem;
+        }
+        .out-of-stock-text {
+          color: var(--color-error);
+          font-weight: 600;
+          font-size: 1rem;
+        }
         .button-container {
           display: flex;
           gap: 1rem;
@@ -146,21 +198,32 @@ export default function ProductDetailPage() {
           padding: 1rem 2rem; 
           font-size: 1rem; 
           font-weight: bold; 
-          color: white; 
-          background-color: var(--color-primary-teal); 
+          color: var(--color-dark-grey); 
+          background-color: var(--color-primary); 
           border: none; 
-          border-radius: 5px; 
+          border-radius: 8px; 
           cursor: pointer; 
           text-transform: uppercase;
           flex-grow: 1;
+          transition: all 0.3s ease;
+          box-shadow: var(--shadow-light);
+        }
+        .add-to-cart-btn:hover, .buy-now-btn:hover {
+          background-color: var(--color-accent);
+          box-shadow: var(--shadow-medium);
+        }
+        .buy-now-btn:disabled {
+          background-color: var(--color-secondary);
+          cursor: not-allowed;
+          opacity: 0.6;
         }
         @media (min-width: 768px) { .product-container { flex-direction: row; } }
       `}</style>
 
-      <div className="product-container">
-        <div className="product-image-container">
+      <div className="product-container page-fade-in">
+        <div className="product-image-container slide-in-left">
           <div className="image-slider">
-            <img className="product-image" src={currentImage} alt={product.name} />
+            <img className="product-image scale-on-hover" src={currentImage} alt={product.name} />
             {images.length > 1 && (
               <>
                 <button className="slider-button prev-button" onClick={prevImage}>‹</button>
@@ -180,20 +243,41 @@ export default function ProductDetailPage() {
             </div>
           )}
         </div>
-        <div className="product-details-container">
-          <h1 className="product-name">{product.name}</h1>
-          <p className="product-price">₹{product.price}</p>
+        <div className="product-details-container slide-in-right">
+          <h1 className="product-name slide-in-down">{product.name}</h1>
+          <p className="product-price slide-in-up">₹{product.price}</p>
+          
+          {/* Simple Out of Stock Display */}
+          {(product.quantity - (product.ordered_quantity || 0)) === 0 && (
+            <div className="out-of-stock-simple">
+              <span className="out-of-stock-icon">🚫</span>
+              <span className="out-of-stock-text">Out of Stock</span>
+            </div>
+          )}
+          
           <p className="product-description">{product.description}</p>
-          <div className="button-container">
-            <button className="add-to-cart-btn" onClick={handleAddToCart}>
+          <div className="button-container stagger-animation">
+            <button className="add-to-cart-btn btn-animate" onClick={handleAddToCart}>
               Add to Cart
             </button>
-            <button className="buy-now-btn" onClick={handleBuyNow}>
-              Buy Now
+            <button 
+              className="buy-now-btn btn-animate" 
+              onClick={handleBuyNow}
+              disabled={(product.quantity - (product.ordered_quantity || 0)) === 0}
+            >
+              {(product.quantity - (product.ordered_quantity || 0)) === 0 ? 'Out of Stock' : 'Buy Now'}
             </button>
           </div>
         </div>
       </div>
+      
+      {/* Recommended Products Section */}
+      {product && (
+        <RecommendedProducts 
+          currentProduct={product} 
+          onProductClick={handleRecommendedProductClick}
+        />
+      )}
     </>
   );
 }

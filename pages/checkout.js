@@ -64,6 +64,30 @@ export default function CheckoutPage() {
       alert('Error placing order: ' + error.message);
     } else {
       const orderId = data.id;
+      
+      // Update product quantities (reduce available stock)
+      for (const item of cart) {
+        // First get current ordered_quantity
+        const { data: productData, error: fetchError } = await supabase
+          .from('products')
+          .select('ordered_quantity')
+          .eq('id', item.id)
+          .single();
+        
+        if (!fetchError && productData) {
+          const newOrderedQuantity = (productData.ordered_quantity || 0) + item.quantity;
+          
+          const { error: updateError } = await supabase
+            .from('products')
+            .update({ ordered_quantity: newOrderedQuantity })
+            .eq('id', item.id);
+          
+          if (updateError) {
+            console.error('Error updating product quantity:', updateError);
+          }
+        }
+      }
+      
       if (paymentMethod === 'COD') {
         localStorage.removeItem('kalamkarCart');
         clearCart();

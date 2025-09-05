@@ -52,9 +52,9 @@ export default function AdminProductsPage() {
         .products-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
         .products-title { font-family: var(--font-playfair); font-size: 2.5rem; margin: 0; }
         .add-btn { padding: 0.8rem 1.5rem; background-color: var(--color-primary-teal); color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
-        .products-table { width: 100%; border-collapse: collapse; background-color: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .products-table th, .products-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
-        .products-table th { background-color: #f8f9fa; font-weight: bold; }
+        .products-table { width: 100%; border-collapse: collapse; background-color: var(--color-card-bg); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-medium); color: var(--color-dark-grey); }
+        .products-table th, .products-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+        .products-table th { background-color: var(--color-accent); font-weight: bold; color: var(--color-dark-grey); }
         .product-image { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
         .actions-cell { display: flex; gap: 0.5rem; }
         .edit-btn, .delete-btn { padding: 0.4rem 0.8rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; text-decoration: none; display: inline-block; }
@@ -73,6 +73,7 @@ export default function AdminProductsPage() {
               <th>Name</th>
               <th>Price</th>
               <th>Category</th>
+              <th>Quantity</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -88,6 +89,18 @@ export default function AdminProductsPage() {
                   <td>{product.name}</td>
                   <td>₹{product.price}</td>
                   <td>{product.category}</td>
+                  <td>
+                    <span style={{ 
+                      color: (product.quantity - (product.ordered_quantity || 0)) === 0 ? '#dc3545' : 
+                             (product.quantity - (product.ordered_quantity || 0)) <= 3 ? '#ffc107' : '#28a745',
+                      fontWeight: 'bold'
+                    }}>
+                      {(product.ordered_quantity || 0)}/{product.quantity || 0}
+                    </span>
+                    <div style={{ fontSize: '0.8rem', color: '#666', marginTop: '2px' }}>
+                      {(product.quantity || 0) - (product.ordered_quantity || 0)} remaining
+                    </div>
+                  </td>
                   <td className="actions-cell">
                     <Link href={`/admin/products/edit/${product.id}`} className="edit-btn">Edit</Link>
                     <button 

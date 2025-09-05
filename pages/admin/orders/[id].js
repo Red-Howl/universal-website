@@ -52,13 +52,14 @@ export default function OrderDetailsPage() {
         .details-container { padding: 2rem; max-width: 900px; margin: auto; }
         .title { font-family: var(--font-playfair); font-size: 2.5rem; margin-bottom: 2rem; }
         .grid-container { display: grid; grid-template-columns: 1fr; gap: 2rem; }
-        .detail-card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; }
-        .card-title { font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
-        .items-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        .items-table th, .items-table td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: middle; }
+        .detail-card { background: var(--color-card-bg); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.5rem; color: var(--color-dark-grey); }
+        .card-title { font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; color: var(--color-dark-grey); }
+        .items-table { width: 100%; border-collapse: collapse; margin-top: 1rem; color: var(--color-dark-grey); }
+        .items-table th, .items-table td { border: 1px solid var(--color-border); padding: 8px; text-align: left; vertical-align: middle; }
+        .items-table th { background-color: var(--color-accent); }
         .item-image { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
-        .screenshot { max-width: 100%; border-radius: 5px; margin-top: 10px; border: 1px solid #ccc; }
-        .management-card { background: #fdf5e6; border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; margin-top: 1.5rem; }
+        .screenshot { max-width: 100%; border-radius: 5px; margin-top: 10px; border: 1px solid var(--color-border); }
+        .management-card { background: var(--color-medium-grey); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.5rem; margin-top: 1.5rem; color: var(--color-dark-grey); }
         @media (min-width: 768px) { .grid-container { grid-template-columns: 1fr 1fr; } }
       `}</style>
       <div className="details-container">

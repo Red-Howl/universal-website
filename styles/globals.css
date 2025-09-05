@@ -1,9 +1,34 @@
 :root {
-  --color-primary-teal: #333333;
-  --color-accent-gold: #D4AF37;
-  --color-background-cream: #A9A9A9;
-  --color-text-charcoal: #333333;
-  --color-buttons-cream:#333333
+  /* Dark Grey Theme Color Palette (defaults) */
+  --color-primary: var(--cfg-color-primary, #6b7280);
+  --color-secondary: var(--cfg-color-secondary, #9ca3af);
+  --color-accent: var(--cfg-color-accent, #4b5563);
+  --color-light-grey: var(--cfg-color-light-grey, #374151);
+  --color-medium-grey: var(--cfg-color-medium-grey, #4b5563);
+  --color-dark-grey: var(--cfg-color-dark-grey, #f9fafb);
+  --color-border: var(--cfg-color-border, #6b7280);
+  --color-hover: var(--cfg-color-hover, #4b5563);
+  --color-success: var(--cfg-color-success, #48bb78);
+  --color-error: var(--cfg-color-error, #f56565);
+  --color-warning: var(--cfg-color-warning, #ed8936);
+
+  /* Legacy support (mapped to grey theme) */
+  --color-primary-teal: var(--cfg-color-primary, #6b7280);
+  --color-accent-gold: var(--cfg-color-secondary, #9ca3af);
+  --color-background-cream: var(--cfg-color-light-grey, #374151);
+  --color-text-charcoal: var(--cfg-color-dark-grey, #f9fafb);
+  --color-buttons-cream: var(--cfg-color-primary, #6b7280);
+
+  /* Additional theme variables */
+  --color-white: var(--cfg-color-white, #374151);
+  --color-black: var(--cfg-color-black, #1f2937);
+  --color-card-bg: var(--cfg-color-card-bg, #4b5563);
+  --color-page-bg: var(--cfg-color-page-bg, #1f2937);
+  --gradient-light: linear-gradient(135deg, var(--color-light-grey) 0%, var(--color-medium-grey) 100%);
+  --gradient-dark: linear-gradient(135deg, var(--color-black) 0%, var(--color-light-grey) 100%);
+  --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 4px 15px rgba(0, 0, 0, 0.4);
+  --shadow-heavy: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -16,11 +41,12 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  background-color: var(--color-background-cream);
-  color: var(--color-text-charcoal);
+  background-color: var(--color-page-bg);
+  color: var(--color-dark-grey);
 }
 
 a {
   color: inherit;
   text-decoration: none;
 }
+

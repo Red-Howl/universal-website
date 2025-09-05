@@ -3,13 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3000 --hostname 0.0.0.0",
+    "dev": "next dev --port 1000 --hostname 0.0.0.0",
     "build": "next build",
-    "start": "next start --port 3000 --hostname 0.0.0.0",
+    "start": "next start --port 1000 --hostname 0.0.0.0",
     "lint": "next lint"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.55.0",
+    "bcryptjs": "^3.0.2",
+    "express-rate-limit": "^8.0.1",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
     "next": "^15.2.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

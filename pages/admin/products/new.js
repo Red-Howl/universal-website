@@ -14,6 +14,7 @@ export default function NewProductPage() {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
+  const [quantity, setQuantity] = useState('');
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const router = useRouter();
@@ -53,7 +54,7 @@ export default function NewProductPage() {
       // Insert the product data with single imageUrl
       const { data: productData, error: insertError } = await supabase
         .from('products')
-        .insert([{ name, description, price, imageUrl: urlData.publicUrl, category }]);
+        .insert([{ name, description, price, imageUrl: urlData.publicUrl, category, quantity: parseInt(quantity) || 0 }]);
 
       if (insertError) {
         throw insertError;
@@ -97,6 +98,10 @@ export default function NewProductPage() {
           <div className="form-group">
             <label htmlFor="category">Category</label>
             <input type="text" id="category" value={category} onChange={(e) => setCategory(e.target.value)} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="quantity">Quantity in Stock</label>
+            <input type="number" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} min="0" required />
           </div>
           <div className="form-group">
             <label htmlFor="image">Product Image</label>

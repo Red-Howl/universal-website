@@ -1,6 +1,8 @@
 import '../styles/globals.css'
+import '../styles/animations.css'
 import Layout from '../components/Layout'
 import { CartProvider } from '../context/CartContext';
+// import SecurityProvider from '../components/SecurityProvider';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -9,12 +11,11 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 function MyApp({ Component, pageProps, siteSettings }) {
   return (
-    <CartProvider>
-      <Layout siteSettings={siteSettings}>
-        {/* --- THIS LINE IS UPDATED --- */}
-        <Component {...pageProps} siteSettings={siteSettings} />
-      </Layout>
-    </CartProvider>
+      <CartProvider>
+        <Layout siteSettings={siteSettings}>
+          <Component {...pageProps} siteSettings={siteSettings} />
+        </Layout>
+      </CartProvider>
   )
 }
 
