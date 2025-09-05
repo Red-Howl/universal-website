@@ -103,27 +103,28 @@ export default function ShopPage() {
         <title>Red Howl Collection | Hand Painted Fashion & Kalamkari | Premium Clothing</title>
         <meta name="description" content="Discover Red Howl's exclusive collection of hand-painted fashion, Kalamkari sarees, and premium clothing. Where art meets fashion with authentic Indian craftsmanship." />
         <meta name="keywords" content="Red Howl, hand painted fashion, Kalamkari, sarees, premium clothing, Indian fashion, art meets fashion" />
-        <link rel="canonical" href="https://theredhowl.netlify.app/shop" />
+        <link rel="canonical" href="https://redhowlcollections.netlify.app/shop" />
         <meta property="og:title" content="Red Howl Collection | Hand Painted Fashion & Kalamkari" />
         <meta property="og:description" content="Discover Red Howl's exclusive collection of hand-painted fashion, Kalamkari sarees, and premium clothing." />
-        <meta property="og:url" content="https://theredhowl.netlify.app/shop" />
+        <meta property="og:url" content="https://redhowlcollections.netlify.app/shop" />
         <meta property="og:type" content="website" />
+        <meta name="google-site-verification" content="g641qoDYIn4W2lsXVPnmNV666txLhQL0EFiHqxuJTAU" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "CollectionPage",
             "name": "Red Howl Collection",
             "description": "Discover Red Howl's exclusive collection of hand-painted fashion, Kalamkari sarees, and premium clothing.",
-            "url": "https://theredhowl.netlify.app/shop",
+            "url": "https://redhowlcollections.netlify.app/shop",
             "isPartOf": {
               "@type": "WebSite",
               "name": "Red Howl",
-              "url": "https://theredhowl.netlify.app"
+              "url": "https://redhowlcollections.netlify.app"
             },
             "about": ["Hand Painted Fashion", "Kalamkari", "Premium Clothing", "Indian Fashion"],
             "potentialAction": {
               "@type": "SearchAction",
-              "target": "https://theredhowl.netlify.app/shop{?q}",
+              "target": "https://redhowlcollections.netlify.app/shop{?q}",
               "query-input": "required name=q"
             }
           })}
